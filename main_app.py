@@ -52,8 +52,8 @@ if st.session_state['authentication_status']:
     
     date_range = [df.head(1)['대금 수령일'].values, df.tail(1)['대금 수령일'].values]
     
-    date_start = st.date_input("From", date_range[0])
-    date_end   = st.date_input("To", date_range[1])
+    date_start = st.date_input("From", dt.date(date_range[0]))
+    date_end   = st.date_input("To", dt.date(date_range[1]))
     
     st.write('Your From is:', date_start)
     st.write('Your To is:', date_end)
