@@ -90,5 +90,9 @@ def summarise_by_month(df, by='대금 수령일'):
             "번역료": sum_bunyuk, 
             "수령액": sum_suryung
             })
-
-    return df.groupby(pd.Grouper(freq='M')).pipe(get_metrics)
+    df = df.groupby(pd.Grouper(freq='M')).pipe(get_metrics)
+    df['년도-월'] = df.index.strftime('%Y-%m')
+    df.reset_index(inplace=True)
+    #df.drop(column = ['대금 수령일'])
+    df.drop(columns = ['대금 수령일'], inplace=True)
+    return df.set_index(['년도-월'])
