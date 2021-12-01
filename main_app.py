@@ -56,15 +56,14 @@ if st.session_state['authentication_status']:
     date_1 = st.sidebar.date_input("To",   date_range[1])
     
     df1 = filter_date(date_0, date_1, df)
-    df2 = summarise_by_month(df1).style.format(
-        {
+    df2 = summarise_by_month(df1)
+    style = {
             '단가 평균': '{:,.2f}',
             '번역료': '{:,.0f}',
             '수령액': '{:,.0f}'
         }
-    )
     
-    st.dataframe(df2)
+    st.dataframe(df2.style.format(style))
     draw_hbar(values=df2['수령액'], labels=df2.index)
     
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
