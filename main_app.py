@@ -11,12 +11,12 @@ from datetime import date
 
 def get_data(what="record"):
     
-    df_list = get_data_google_sheets(st.secrets['gspread_key'], [4,5])
+    df_list = get_data_google_sheets(st.secrets['gspread_key'], [0,1])
     
     if (what=="record"): 
         key = 0
     else: 
-        key = 0
+        key = 1
     
     return generate_record_raw(df_list[key])   
 #
