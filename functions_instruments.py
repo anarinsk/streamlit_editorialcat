@@ -75,7 +75,7 @@ def generate_record_raw(df):
     return df[cols_use]
 
 def filter_date(start, end, df, by='`대금 수령일`'):
-    return df.query("{0} >= @start_date & {0} <= @end_date".format(by)) 
+    return df.query("{0} >= @start & {0} <= @end".format(by)) 
 
 def summarise_by_month(df, by='대금 수령일'): 
 #    
