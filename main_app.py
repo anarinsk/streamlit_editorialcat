@@ -53,7 +53,7 @@ if st.session_state['authentication_status']:
     #page = PAGES[selection]
     #page.app(df_snapshot)
     st.write("Hello!")
-    st.write(df_record.columns)
+    st.dataframe(df_record)
     
     
 elif st.session_state['authentication_status']==False:

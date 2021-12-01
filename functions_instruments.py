@@ -64,13 +64,15 @@ def generate_record_raw(df):
     cols_remove = []
     cols_numeric = ['단가', '번역료', '수령액']
     cols_date = ['마감일', '대금 수령일']
+    cols_use = ['발주처', '방영 채널', '작품명 / 시즌', 'Ep', 'RT', '영상 종류', '작업 종류', '마감일',
+       '대금 수령일', '단가', '번역료', '수령액', '비고']
     # Cols to be handled 
     df = df.copy()
     df.drop(cols_remove, axis=1, inplace=True)
     df[cols_numeric] = df[cols_numeric].apply(turn_str_num, axis=1)
     df[cols_date] = df[cols_date].apply(pd.to_datetime, axis=1)
     #
-    return df 
+    return df[cols_use]
 #    
 def prepare_df(cols: list, df) -> pd.DataFrame:
     return df[cols]
