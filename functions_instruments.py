@@ -104,4 +104,5 @@ def draw_hbar(labels, values):
             x=values, 
             y=labels, 
             orientation='h'))
-    fig.show()
+    return fig
+    #fig.show()
