@@ -56,8 +56,11 @@ if st.session_state['authentication_status']:
     date_1 = st.sidebar.date_input("To",   date_range[1])
     
     df1 = filter_date(date_0, date_1, df)
+    df2 = summarise_by_month(df1).style.format(
+        {'단가 평균': '{:,.2}'}
+    )
     
-    st.dataframe(summarise_by_month(df1))
+    st.dataframe(df2)
     
     
     #st.write('Your From is:', date_start)
