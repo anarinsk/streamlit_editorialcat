@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np 
 import streamlit_authenticator as stauth
 from functions_instruments import *
-from datetime import date 
+import datetime as dt
 
 #import gspread
 #from google.oauth2.service_account import Credentials
@@ -20,8 +20,8 @@ def get_data(what="record"):
     
     return generate_record_raw(df_list[key])   
 #
-df_record = get_data()
-today = date.today()
+df = get_data()
+today = dt.date.today()
 #
 #import app_0
 #import app_1
@@ -48,12 +48,18 @@ name, authentication_status = authenticator.login('Login','main')
 if st.session_state['authentication_status']:
     st.write('Welcome *%s*' % (name))
     st.write(f'Stats of {today}')
-    #st.sidebar.title('Navigation')
-    #selection = st.sidebar.selectbox("Go to", list(PAGES.keys()))
-    #page = PAGES[selection]
-    #page.app(df_snapshot)
-    st.write("Hello!")
-    st.dataframe(df_record)
+    st.title("Editorial Cat's Works")
+    
+    date_range = [df.head(1)['대금 수령일'].values, df.tail(1)['대금 수령일'].values]
+    
+    date_start = st.date_input("From", date_range[0])
+    date_end   = st.date_input("To", date_range[1])
+    
+    st.write('Your From is:', date_start)
+    st.write('Your To is:', date_end)
+    
+    start_date = dt.datetime.strptime('2021-04-10', '%Y-%m-%d')
+    end_date =   dt.datetime.strptime('2021-08-10', '%Y-%m-%d')
     
     
 elif st.session_state['authentication_status']==False:

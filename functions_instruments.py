@@ -73,101 +73,22 @@ def generate_record_raw(df):
     df[cols_date] = df[cols_date].apply(pd.to_datetime, axis=1)
     #
     return df[cols_use]
+
+def filter_date(start, end, df, by='`대금 수령일`'):
+    return df.query("{0} >= @start_date & {0} <= @end_date".format(by)) 
+
+def summarise_by_month(df, by='대금 수령일'): 
 #    
-def prepare_df(cols: list, df) -> pd.DataFrame:
-    return df[cols]
-#    
-def view_port(df: pd.DataFrame, include_zero:bool=False, detail:bool=False, include_won:bool=False):
-    
-    col_drop_1 = ['매수액', '매도액', '매수-매도', 'TD-1 평가액', 'TD-1W 평가액', 'TD-4W 평가액', 'TD-8W 평가액']    
-    
-    df = df.reset_index(drop=True) 
-    
-    if (detail==False): 
-        df.drop(col_drop_1, axis=1, inplace=True)
-    
-    if (include_zero==False): 
-        df = df.query(
-            "`현재 보유량` > 0"
-        )
-        df = df.copy().drop(['Consoliated Profit'], axis=1)
+    df.index = pd.to_datetime(df[by],format='%m/%d/%y %I:%M%p')
 
-    if(include_won==False): 
-        df = df.query(
-            "`종목` != '원화'"
-        )
-    
-    df = df.sort_values(by = ['Share', 'TD Profit Rate'], ascending=False)
-    
-    return df.set_index(['종목'])
-#
-def view_stats(cols:list, df): 
+    def get_metrics(grp_obj):
+        mean_danga = grp_obj['단가'].mean()
+        sum_bunyuk = grp_obj['번역료'].sum()
+        sum_suryung = grp_obj['수령액'].sum()
+        return pd.DataFrame({
+            "단가 평균": mean_danga, 
+            "번역료": sum_bunyuk, 
+            "수령액": sum_suryung
+            })
 
-    df = df.reset_index()
-    list_1 = cols + ['TD 평가액', '거래액']
-    df = df[list_1].groupby(cols).sum()
-    df1 = df.assign(**{
-            '이익': df['TD 평가액'] - df['거래액'], 
-            '이익률': (df['TD 평가액'] - df['거래액']) / df['거래액'],  
-            '자산 비중': df['TD 평가액']/sum(df['TD 평가액'])
-               })
-    df1 = df1.sort_values(['자산 비중'], ascending=False)
-    df1_style = df1.style.format({
-        'TD 평가액': '{:,.0f}',
-        '거래액': '{:,.0f}',
-        '이익': '{:,.0f}',
-        '이익률': '{:.2%}', 
-        '자산 비중': '{:.2%}'
-    })
-    
-    return df1_style
-#
-def view_price(df: pd.DataFrame, include_zero:bool=False, detail:bool=False, include_won:bool=False):
-    
-    col_drop_1 = ['TD-1 주가', 'TD-1W 주가', 'TD-4W 평균', 'TD-8W 평균']    
-    
-    df = df.reset_index(drop=True) 
-    
-    if (detail==False): 
-        df.drop(col_drop_1, axis=1, inplace=True)
-    
-    if (include_zero==False): 
-        df = df.query(
-            "`현재 보유량` > 0"
-        )
-        df = df.copy().drop(['Consoliated Profit'], axis=1)
-
-    if(include_won==False): 
-        df = df.query(
-            "`종목` != '원화'"
-        )
-    
-    df = df.sort_values(by = ['지역', '종목'], ascending=True)
-    df = df.set_index(['종목'])
-    
-    arange = ['TD 주가', '98.5%', '97%', '95%', '93%', '90%', '85%', '52W High', '52W Low', '종목명', 'TD 평가액', 'TD Profit Rate']
-    
-    df = df[arange]
-    df_style = df.style.format({
-        'TD 평가액': '{:,.0f}',
-        'TD Profit Rate': '{:.2%}'
-    })
-    
-    return df
-#
-def view_performance(cols, df):
-    df1 = df.groupby(cols).sum()
-    df1 = df1.assign(**{
-        "TD-1 평가액 차":  df1['TD 평가액'] -  df1['TD-1 평가액'], 
-        "TD-1W 평가액 차": df1['TD 평가액'] - df1['TD-1W 평가액'],
-        "TD-4W 평가액 차": df1['TD 평가액'] - df1['TD-4W 평가액'],
-        "TD-8W 평가액 차": df1['TD 평가액'] - df1['TD-8W 평가액']
-        })
-    df1 = df1.query("`TD 평가액` > 0")
-    df1 = df1.sort_values(['TD-1 평가액 차'], ascending=True)
-    df1 = df1.query("{0} not in ['현금', '원화', 'cash']".format(cols[0]))
-    df1 = df1.sort_values(by=['TD 평가액'], ascending=False)
-    format_num = ["{:,.2f}" for k in range(len(df1.columns))]
-    style_1 = dict(zip(df1.columns, format_num))
-    
-    return df1
+    return df.groupby(pd.Grouper(freq='M')).pipe(get_metrics)
