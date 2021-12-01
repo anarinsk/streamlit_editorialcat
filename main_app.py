@@ -53,9 +53,12 @@ if st.session_state['authentication_status']:
     date_range = [df.head(1)['대금 수령일'].item(), df.tail(1)['대금 수령일'].item()]
     
     date_0 = st.date_input("From", date_range[0])
-    date_1   = st.date_input("To",   date_range[1])
+    date_1 = st.date_input("To",   date_range[1])
     
-    st.dataframe(filter_date(date_0, date_1, df))
+    df1 = filter_date(date_0, date_1, df)
+    
+    summarise_by_month(df1)
+    
     
     #st.write('Your From is:', date_start)
     #st.write('Your To is:', date_end)
