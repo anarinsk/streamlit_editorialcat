@@ -57,7 +57,11 @@ if st.session_state['authentication_status']:
     
     df1 = filter_date(date_0, date_1, df)
     df2 = summarise_by_month(df1).style.format(
-        {'단가 평균': '{:,.2f}'}
+        {
+            '단가 평균': '{:,.2f}',
+            '번역료': '{:,.0f}',
+            '수령액': '{:,.0f}'
+        }
     )
     
     st.dataframe(df2)
