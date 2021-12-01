@@ -50,16 +50,16 @@ if st.session_state['authentication_status']:
     st.write(f'Stats of {today}')
     st.title("Editorial Cat's Works")
     
-    date_range = [df.head(1)['대금 수령일'].values, df.tail(1)['대금 수령일'].values]
+    date_range = [df.head(1)['대금 수령일'].item(), df.tail(1)['대금 수령일'].item()]
     
-    date_start = st.date_input("From", dt.date(""))
-    date_end   = st.date_input("To", dt.date(date_range[1]))
+    date_start = st.date_input("From", f'{date_range[0]:%Y-%m-%d}')
+    date_end   = st.date_input("To",   f'{date_range[1]:%Y-%m-%d}')
     
     st.write('Your From is:', date_start)
     st.write('Your To is:', date_end)
     
-    start_date = dt.datetime.strptime('2021-04-10', '%Y-%m-%d')
-    end_date =   dt.datetime.strptime('2021-08-10', '%Y-%m-%d')
+    #start_date = dt.datetime.strptime('2021-04-10', '%Y-%m-%d')
+    #end_date =   dt.datetime.strptime('2021-08-10', '%Y-%m-%d')
     
     
 elif st.session_state['authentication_status']==False:
