@@ -46,18 +46,18 @@ name, authentication_status = authenticator.login('Login','main')
 #st.write(st.session_state)
 
 if st.session_state['authentication_status']:
-    st.write('Welcome *%s*' % (name))
-    st.write(f'Stats of {today}')
-    st.title("Editorial Cat's Works")
+    st.sidebar.write('Welcome *%s*' % (name))
+    st.sidebar.write(f'Stats of {today}')
+    st.title("Editorial Cat's Works Stats")
     
     date_range = [df.head(1)['대금 수령일'].item(), df.tail(1)['대금 수령일'].item()]
     
-    date_0 = st.date_input("From", date_range[0])
-    date_1 = st.date_input("To",   date_range[1])
+    date_0 = st.sidebar.date_input("From", date_range[0])
+    date_1 = st.sidebar.date_input("To",   date_range[1])
     
     df1 = filter_date(date_0, date_1, df)
     
-    summarise_by_month(df1)
+    st.dataframe(summarise_by_month(df1))
     
     
     #st.write('Your From is:', date_start)
