@@ -20,7 +20,7 @@ def get_data(what="record"):
     
     return generate_record_raw(df_list[key])   
 #
-df_record = get_data("record")
+df_record = get_data()
 today = date.today()
 #
 #import app_0
@@ -52,7 +52,8 @@ if st.session_state['authentication_status']:
     #selection = st.sidebar.selectbox("Go to", list(PAGES.keys()))
     #page = PAGES[selection]
     #page.app(df_snapshot)
-    st.write(df_record)
+    st.dataframe(df_record)
+    
     
 elif st.session_state['authentication_status']==False:
     st.error('Username/password is incorrect')
