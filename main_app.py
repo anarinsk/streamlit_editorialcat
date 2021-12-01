@@ -66,6 +66,8 @@ if st.session_state['authentication_status']:
     
     st.dataframe(df2)
     
+    st.plotly_chart(draw_hbar(values=df4['수령액'], labels=df4.index))
+    
     
     #st.write('Your From is:', date_start)
     #st.write('Your To is:', date_end)
