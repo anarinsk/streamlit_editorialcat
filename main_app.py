@@ -64,7 +64,7 @@ if st.session_state['authentication_status']:
         }
     
     st.dataframe(df2.style.format(style))
-    draw_hbar(values=df2['수령액'], labels=df2.index)
+    st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     
