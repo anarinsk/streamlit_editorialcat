@@ -23,15 +23,15 @@ def get_data(what="record"):
 df_record = get_data("record")
 today = date.today()
 #
-import app_0
-import app_1
-import app_2
+#import app_0
+#import app_1
+#import app_2
 
-PAGES = {
-     "Overview"    : app_0,
-     "Stocks Stats": app_1,
-     "Price Taker" : app_2
-}
+#PAGES = {
+#     "Overview"    : app_0,
+#     "Stocks Stats": app_1,
+#     "Price Taker" : app_2
+#}
 
 # Login 
 names = [st.secrets['a_name'], st.secrets['m_name']]
