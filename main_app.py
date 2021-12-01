@@ -52,7 +52,8 @@ if st.session_state['authentication_status']:
     #selection = st.sidebar.selectbox("Go to", list(PAGES.keys()))
     #page = PAGES[selection]
     #page.app(df_snapshot)
-    st.dataframe(df_record)
+    st.write("Hello!")
+    #st.dataframe(df_record)
     
     
 elif st.session_state['authentication_status']==False:
