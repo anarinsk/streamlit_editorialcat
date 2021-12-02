@@ -73,7 +73,7 @@ if st.session_state['authentication_status']:
     #    df3 = df2.drop(group_by_2, axis=1)
                                  
     st.dataframe(df2.style.format(style))
-    st.plotly_chart(df2, group_by)
+    st.plotly_chart(draw_hbar(df2, group_by))
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     
