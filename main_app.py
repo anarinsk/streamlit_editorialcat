@@ -53,6 +53,7 @@ if st.session_state['authentication_status']:
     date_0 = st.sidebar.date_input("From", date_range[0])
     date_1 = st.sidebar.date_input("To",   date_range[1])
     group_by = st.sidebar.radio("Group by", ('all', '발주처', '방영 채널'))
+    show_df = st.sidebar.radio("Show table", ('No', 'Yes'))
     
     df1 = filter_date(date_0, date_1, df)
     df2 = summarise_by_month(df1, group_by=[group_by])
@@ -72,10 +73,11 @@ if st.session_state['authentication_status']:
     #    group_by_2.remove(group_by)
     #    df3 = df2.drop(group_by_2, axis=1)
                                  
-    st.dataframe(df2.style.format(style))
+    #st.dataframe(df2.style.format(style))
     st.plotly_chart(draw_hbar(df2, group_by))
-    #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
-    #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
+    st.write("***")
+    if (show_df=="Yes"): 
+        st.dataframe(df2.style.format(style)) 
     
        
 elif st.session_state['authentication_status']==False:
