@@ -70,8 +70,8 @@ if st.session_state['authentication_status']:
     if group_by=="all": 
         df3 = df2.drop(columns = ['발주처', '방영 채널'])
     else: 
-        group_by_2 = ['발주처', '방영 채널'].remove(group_by)
-        df3 = df2.drop(columns =group_by_2)
+        group_by_2 = ['발주처', '방영 채널']
+        df3 = df2.drop(columns=group_by_2.remove(group_by))
                                  
     st.dataframe(df3.style.format(style))
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
