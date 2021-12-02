@@ -63,8 +63,8 @@ if st.session_state['authentication_status']:
             '단가 평균': '{:,.2f}',
             '번역료': '{:,.0f}',
             '수령액': '{:,.0f}', 
-            '발주처': , 
-            '방영 채널'            
+            '발주처': '', 
+            '방영 채널': ''            
         }
     
     if group_by=="all": 
