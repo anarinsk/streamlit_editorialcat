@@ -78,9 +78,9 @@ def generate_record_raw(df):
 def filter_date(start, end, df, by='`대금 수령일`'):
     return df.query("{0} >= @start & {0} <= @end".format(by)) 
 
-def summarise_by_month(df, by='대금 수령일'): 
+def summarise_by_month(df, time_by='대금 수령일', group_by='all'): 
 #    
-    df.index = pd.to_datetime(df[by],format='%m/%d/%y %I:%M%p')
+    df.index = pd.to_datetime(df[time_by],format='%m/%d/%y %I:%M%p')
 
     def get_metrics(grp_obj):
         mean_danga = grp_obj['단가'].mean()
@@ -91,12 +91,20 @@ def summarise_by_month(df, by='대금 수령일'):
             "번역료": sum_bunyuk, 
             "수령액": sum_suryung
             })
-    df = df.groupby(pd.Grouper(freq='M')).pipe(get_metrics)
-    df['년도-월'] = df.index.strftime('%Y-%m')
+    if group_by=="all":
+        df = df.groupby(pd.Grouper(freq='M')).pipe(get_metrics)
+        cols_arange = ['년도-월','단가 평균', '번역료', '수령액']   
+    else: 
+        groups = group_by + [pd.Grouper(freq='M')]
+        df = df.groupby(groups).pipe(get_metrics)
+        cols_arange = ['년도-월'] + group_by + ['단가 평균', '번역료', '수령액']   
+    
+    df = df.reset_index()
+    df['년도-월'] = df['대금 수령일'].dt.strftime('%Y-%m')
     df.reset_index(inplace=True)
-    #df.drop(column = ['대금 수령일'])
-    df.drop(columns = ['대금 수령일'], inplace=True)
-    return df.set_index(['년도-월'])
+    df.drop(columns = ['대금 수령일'], inplace=True)        
+ 
+    return df[cols_arange]
 
 def draw_hbar(labels, values):
     # Use `hole` to create a donut-like pie chart
