@@ -5,9 +5,7 @@ import streamlit_authenticator as stauth
 from functions_instruments import *
 import datetime as dt
 
-#import gspread
-#from google.oauth2.service_account import Credentials
-#from functions_instruments import *
+
 
 def get_data(what="record"):
     
@@ -75,15 +73,11 @@ if st.session_state['authentication_status']:
         df3 = df2.drop(group_by_2, axis=1)
                                  
     st.dataframe(df3.style.format(style))
-    #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
+    st.plotly_chart(df3, group_by)
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     
-    
-    #st.write('Your From is:', date_start)
-    #st.write('Your To is:', date_end)
-   
-    
+       
 elif st.session_state['authentication_status']==False:
     st.error('Username/password is incorrect')
 elif st.session_state['authentication_status']==None:

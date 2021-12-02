@@ -6,6 +6,7 @@ import streamlit_authenticator as stauth
 import gspread
 from google.oauth2.service_account import Credentials
 import plotly.graph_objects as go
+import plotly.express as px
 
 # Functions in Loading data from Google Spreadsheet
 
@@ -106,11 +107,9 @@ def summarise_by_month(df, time_by='대금 수령일', group_by='all'):
  
     return df[cols_arange]
 
-def draw_hbar(labels, values):
-    # Use `hole` to create a donut-like pie chart
-    fig = go.Figure(go.Bar(
-            x=values, 
-            y=labels, 
-            orientation='h'))
+def draw_hbar(df, color_by):
+    if color_by=="all": 
+        fig = px.bar(df, y="년도-월", x="수령액", title=f"Monthly Recieved by {color_by}", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
+    else:
+        fig = px.bar(df, y="년도-월", x="수령액", color=color_by, title=f"Monthly Recieved by {color_by}", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
     return fig
-    #fig.show()
