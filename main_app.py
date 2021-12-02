@@ -77,6 +77,7 @@ if st.session_state['authentication_status']:
     st.plotly_chart(draw_hbar(df2, group_by))
     st.write("***")
     if (show_df=="Yes"): 
+        st.subheader("Check the number")
         st.dataframe(df2.style.format(style)) 
     
        
