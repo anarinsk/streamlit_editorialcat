@@ -92,7 +92,7 @@ def summarise_by_month(df, time_by='대금 수령일', group_by='all'):
             "번역료": sum_bunyuk, 
             "수령액": sum_suryung
             })
-    if group_by=="all":
+    if group_by==["all"]:
         df = df.groupby(pd.Grouper(freq='M')).pipe(get_metrics)
         cols_arange = ['년도-월','단가 평균', '번역료', '수령액']   
     else: 

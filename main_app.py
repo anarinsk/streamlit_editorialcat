@@ -55,7 +55,7 @@ if st.session_state['authentication_status']:
     group_by = st.sidebar.radio("Group by", ('all', '발주처', '방영 채널'))
     
     df1 = filter_date(date_0, date_1, df)
-    df2 = summarise_by_month(df1, group_by=group_by)
+    df2 = summarise_by_month(df1, group_by=[group_by])
     
     style = {
             '단가 평균': '{:,.2f}',
