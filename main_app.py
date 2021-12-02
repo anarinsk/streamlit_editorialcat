@@ -54,7 +54,7 @@ if st.session_state['authentication_status']:
     
     date_0 = st.sidebar.date_input("From", date_range[0])
     date_1 = st.sidebar.date_input("To",   date_range[1])
-    group_by = st.sidebar.button("Group by", ('all', '발주처', '방영 채널')
+    group_by = st.sidebar.button("Group by", ('all', '발주처', '방영 채널'))
     
     df1 = filter_date(date_0, date_1, df)
     df2 = summarise_by_month(df1, group_by=['발주처', '방영 채널'])
