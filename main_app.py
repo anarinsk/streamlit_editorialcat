@@ -55,7 +55,7 @@ if st.session_state['authentication_status']:
     group_by = st.sidebar.radio("Group by", ('all', '발주처', '방영 채널'))
     
     df1 = filter_date(date_0, date_1, df)
-    df2 = summarise_by_month(df1, group_by=['발주처', '방영 채널'])
+    df2 = summarise_by_month(df1, group_by=group_by)
     
     style = {
             '단가 평균': '{:,.2f}',
@@ -65,15 +65,15 @@ if st.session_state['authentication_status']:
             '방영 채널': ''            
         }
     
-    if group_by=="all": 
-        df3 = df2.drop(columns = ['발주처', '방영 채널'])
-    else: 
-        group_by_2 = ['발주처', '방영 채널']
-        group_by_2.remove(group_by)
-        df3 = df2.drop(group_by_2, axis=1)
+    #if group_by=="all": 
+    #    df3 = summarise_by_month(df1, group_by='all')
+    #else: 
+    #    group_by_2 = ['발주처', '방영 채널']
+    #    group_by_2.remove(group_by)
+    #    df3 = df2.drop(group_by_2, axis=1)
                                  
-    st.dataframe(df3.style.format(style))
-    st.plotly_chart(df3, group_by)
+    st.dataframe(df2.style.format(style))
+    #st.plotly_chart(df3, group_by)
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     #st.plotly_chart(draw_hbar(values=df2['수령액'], labels=df2.index))
     
