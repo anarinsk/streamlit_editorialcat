@@ -111,5 +111,5 @@ def draw_hbar(df, color_by):
     if color_by=="all": 
         fig = px.bar(df, y="년도-월", x="수령액", title=f"Monthly earned by {color_by}", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
     else:
-        fig = px.bar(df, y="년도-월", x="수령액", color=color_by, title=f"Monthly earned by {color_by}[0]", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
+        fig = px.bar(df, y="년도-월", x="수령액", color=color_by, title=f"Monthly earned by {color_by}", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
     return fig
