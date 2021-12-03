@@ -20,6 +20,7 @@ def get_data(what="record"):
 #
 df = get_data()
 today = dt.date.today()
+session_state = get(password='')
 
 def main(): 
     st.sidebar.write('Welcome *%s*' % (name))
