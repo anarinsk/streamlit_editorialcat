@@ -4,7 +4,7 @@ import numpy as np
 import streamlit_authenticator as stauth
 from functions_instruments import *
 import datetime as dt
-
+from SessionState import get
 
 
 def get_data(what="record"):
@@ -20,30 +20,8 @@ def get_data(what="record"):
 #
 df = get_data()
 today = dt.date.today()
-#
-#import app_0
-#import app_1
-#import app_2
 
-#PAGES = {
-#     "Overview"    : app_0,
-#     "Stocks Stats": app_1,
-#     "Price Taker" : app_2
-#}
-
-# Login 
-names = [st.secrets['a_name'], st.secrets['m_name']]
-usernames = [st.secrets['a_id'], st.secrets['m_id']]
-hashed_passwords = [st.secrets['a_pw'], st.secrets['m_pw']]
-#
-authenticator = stauth.authenticate(names,usernames,hashed_passwords,
-                                    'cookie', '1slghnlm;sf', cookie_expiry_days=30)
-#
-name, authentication_status = authenticator.login('Login','main')
-
-#st.write(st.session_state)
-
-if st.session_state['authentication_status']:
+def main(): 
     st.sidebar.write('Welcome *%s*' % (name))
     st.sidebar.write(f'Stats of {today}')
     st.title("Editorial Cat's Work Stats")
@@ -80,8 +58,15 @@ if st.session_state['authentication_status']:
         st.subheader("Check the number")
         st.dataframe(df2.style.format(style)) 
     
-       
-elif st.session_state['authentication_status']==False:
-    st.error('Username/password is incorrect')
-elif st.session_state['authentication_status']==None:
-    st.warning('Please enter your username and password')
+#    
+if session_state.password != st.secrets['m_pw']:
+    pwd_placeholder = st.empty()
+    pwd = pwd_placeholder.text_input("Password:", value="", type="password")
+    session_state.password = pwd
+    if session_state.password == st.secrets['m_pw']:
+        pwd_placeholder.empty()
+        main()
+    else:
+        st.error("the password you entered is incorrect")
+else:
+    main()
