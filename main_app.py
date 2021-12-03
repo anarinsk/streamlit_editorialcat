@@ -23,7 +23,7 @@ today = dt.date.today()
 session_state = get(password='')
 
 def main(): 
-    st.sidebar.write('Welcome *%s*' % (name))
+    st.sidebar.subheader('Welcome mel!')
     st.sidebar.write(f'Stats of {today}')
     st.title("Editorial Cat's Work Stats")
     
