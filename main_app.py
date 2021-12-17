@@ -38,6 +38,7 @@ def main():
     df2 = summarise_by_month(df1, group_by=[group_by])
     
     style = {
+            '대금 수령일': lambda t: t.strftime("%m/%d/%Y"),
             '단가 평균': '{:,.2f}',
             '번역료': '{:,.0f}',
             '수령액': '{:,.0f}', 
