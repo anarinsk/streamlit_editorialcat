@@ -4,10 +4,16 @@ import numpy as np
 from functions_instruments import *
 import datetime as dt
 
-import ast
-with open('secrets.txt') as f: 
-    secrets_raw = f.read()
-secrets = ast.literal_eval(secrets_raw)
+secrets = dict{
+    "project_id": st.secrets["project_id"],
+    "private_key_id": st.secrets["private_key_id"],
+    "private_key": st.secrets["private_key"],
+    "client_email": st.secrets["client_email"],
+    "client_id": st.secrets["client_id"],
+    "client_x509_cert_uri": st.secrets["client_x509_cert_uri"],
+    "spread_key": st.secrets["spread_key"],
+    "m_pw": st.secrets["m_pw"]
+    }
 
 @st.cache(allow_output_mutation=True)
 def get_data(what="raw"):
