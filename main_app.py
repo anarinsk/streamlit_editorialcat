@@ -1,74 +1,81 @@
 import streamlit as st
 import pandas as pd
 import numpy as np 
-import streamlit_authenticator as stauth
 from functions_instruments import *
 import datetime as dt
-from SessionState import get
 
+import ast
+with open('secrets.txt') as f: 
+    secrets_raw = f.read()
+secrets = ast.literal_eval(secrets_raw)
 
-def get_data(what="record"):
+@st.cache(allow_output_mutation=True)
+def get_data(what="raw"):
     
-    df_list = get_data_google_sheets(st.secrets['gspread_key'], [0,1])
-    
-    if (what=="record"): 
+    df_list = get_data_google_sheets([0,1], secrets)
+
+    if (what=="raw"): 
         key = 0
     else: 
         key = 1
     
+    #return df_list[0]
     return generate_record_raw(df_list[key])   
 #
 df = get_data()
 today = dt.date.today()
-session_state = get(password='')
 
 def main(): 
     st.sidebar.subheader('Welcome mel!')
     st.sidebar.write(f'Stats of {today}')
-    st.title("Editorial Cat's Work Stats")
+
+    st.header("🐾🐾🐾Editorial Cat's Dashboard🐈🐈🐈")
+
+    st.subheader("Key work stats")
+
+    total_earning, diff_year_amt, diff_year_pct, latest_month_amt, month_before_amt, diff_month_pct, best_month, best_month_amt = extract_metrics(df)
+    month_latest = max(df['대금 수령일']).strftime("%Y-%m")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Earning", f"{total_earning/10**6: ,.2f} M", f"{diff_year_amt/10**6: ,.2f} M ({diff_year_pct*100: .1f}%)")
+    col2.metric(f"Latest Monthly ({month_latest})", f"{latest_month_amt: ,.0f}", f"{latest_month_amt - month_before_amt: ,.0f} ({diff_month_pct*100: ,.1f}%)")
+    col3.metric(f"The highest monthly is {best_month}", f"{best_month_amt: ,.0f}")
     
-    date_range = [df.head(1)['대금 수령일'].item(), df.tail(1)['대금 수령일'].item()]
+    st.markdown("--------")
+
+    st.subheader("Spreadsheet")
     
-    date_0 = st.sidebar.date_input("From", date_range[0])
-    date_1 = st.sidebar.date_input("To",   date_range[1])
-    group_by = st.sidebar.radio("Group by", ('all', '발주처', '방영 채널'))
-    show_df = st.sidebar.radio("Show table", ('No', 'Yes'))
+    date_range = [min(df['대금 수령일']), max(df['대금 수령일'])]
     
+    date_0 = st.sidebar.date_input("From (default: earliest)", date_range[0])
+    date_1 = st.sidebar.date_input("To (default: latest)",   date_range[1])
+    group_by_df = st.sidebar.multiselect(
+     'Data by',
+     ['발주처', '방영 채널', '작업 종류', '영상 종류'],
+     [])
+    period_by = st.sidebar.radio("Period by", ('Month', 'Year', 'All'))
+    #show_df = st.sidebar.radio("Show table", ('No', 'Yes'))
+    
+    period_by_2 = {'Month': 'M', 'Year': 'Y', 'All': 'All'}
     df1 = filter_date(date_0, date_1, df)
-    df2 = summarise_by_month(df1, group_by=[group_by])
-    
+    df2 = summarise_by_v2(df1, period_by=period_by_2[period_by], group_by=group_by_df)    
+
     style = {
             '대금 수령일': lambda t: t.strftime("%m/%d/%Y"),
-            '단가 평균': '{:,.2f}',
+            '단가 평균': '{:,.1f}',
             '번역료': '{:,.0f}',
             '수령액': '{:,.0f}', 
             '발주처': '', 
             '방영 채널': ''            
         }
     
-    #if group_by=="all": 
-    #    df3 = summarise_by_month(df1, group_by='all')
-    #else: 
-    #    group_by_2 = ['발주처', '방영 채널']
-    #    group_by_2.remove(group_by)
-    #    df3 = df2.drop(group_by_2, axis=1)
-                                 
-    #st.dataframe(df2.style.format(style))
-    st.plotly_chart(draw_hbar(df2, group_by), use_container_width=True)
-    st.write("***")
-    if (show_df=="Yes"): 
-        st.subheader("Check the number")
-        st.dataframe(df2.style.format(style)) 
+    st.write(df2.style.format(style))
+
+    st.markdown("--------")
     
+    st.subheader("Chart")
+
+    container = st.container()
+    container.plotly_chart(gen_chart(df2, period_by=period_by_2[period_by], group_by=group_by_df), use_container_width=True) 
 #    
-if session_state.password != st.secrets['m_pw']:
-    pwd_placeholder = st.empty()
-    pwd = pwd_placeholder.text_input("Password:", value="", type="password")
-    session_state.password = pwd
-    if session_state.password == st.secrets['m_pw']:
-        pwd_placeholder.empty()
-        main()
-    else:
-        st.error("the password you entered is incorrect")
-else:
+if check_password(secrets):
     main()
