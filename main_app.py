@@ -74,7 +74,8 @@ def main():
             '방영 채널': ''            
         }
     
-    st.write(df2.style.format(style))
+    #st.write(df2.style.format(style))
+    st.dataframe(df2.style.format(style), width=1800, height=600)
 
     st.markdown("--------")
     

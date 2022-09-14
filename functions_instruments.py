@@ -182,33 +182,37 @@ def extract_metrics(df):
     
     return total_earning, diff_year_amt, diff_year_pct, latest_month_amt, month_before_amt, diff_month_pct, best_month, best_month_amt
 
+def format_all_yaxis(fig, font_size, tick_font_size=13.5): 
+    return fig.update_layout(font=dict(size=font_size), yaxis=dict(showticklabels=True, title_text='', tickangle=20, tickfont_size=tick_font_size, ticksuffix=' ', categoryorder='total ascending')) 
+
 def gen_chart(df, period_by, group_by):
     
     df = df.reset_index()    
-    font_size = 11
+    font_size = 15
     
     if  (group_by == []) & (period_by == 'All'):
         df = df.sort_values(by='수령액', ascending=True)
         x_value = df["수령액"].values[0]
         fig = px.bar(y=[0], x=[x_value], title=f"Total earned", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
-        return fig.update_yaxes(visible=False, showticklabels=False).update_xaxes(title="수령액").update_traces(width=0.15).update_layout(font=dict(size=font_size)) 
-    
+        return fig.update_layout(font=dict(size=font_size), yaxis=dict(visible=False), xaxis=dict(title='수령액')).update_traces(width=0.5)
+    #    
     elif (len(group_by) == 1) & (period_by == 'All'):
         df = df.sort_values(by='수령액', ascending=True)
         y_var = group_by[0]
         fig = px.bar(df, y=y_var, x="수령액", title=f"Total earned by {y_var}", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
-        return fig.update_layout(font=dict(size=font_size)) 
-    
+        return format_all_yaxis(fig, font_size)
+    #
     elif (len(group_by) > 1) & (period_by == 'All'):
         y_var = group_by[0]
         color_var = group_by[1]
         fig = px.bar(df, y=y_var, x="수령액", color=color_var, title=f"Total earned by {y_var} and {color_var}", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')   
-        return fig.update_layout(font=dict(size=font_size), yaxis=dict(type='category', categoryorder='total ascending'))  
-
+        return format_all_yaxis(fig, font_size)
+    #    
     elif (group_by == []) & (period_by != 'All'):
         df = df.sort_values(by='time', ascending=True)
         fig = px.bar(df, y='time', x="수령액", title=f"Timely earned", color_discrete_sequence=px.colors.qualitative.Antique, orientation='h')
         return fig.update_layout(font=dict(size=font_size)) 
+    #
     else:
         df = df.sort_values(by='time', ascending=True) 
         color_var = group_by[0]
