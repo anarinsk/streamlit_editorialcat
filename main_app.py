@@ -1,9 +1,12 @@
+## Import packages 
+
 import streamlit as st
 import pandas as pd
 import numpy as np 
 from functions_instruments import *
 import datetime as dt
 
+## Set credentials
 secrets = {
     "project_id": st.secrets["project_id"],
     "private_key_id": st.secrets["private_key_id"],
@@ -15,6 +18,7 @@ secrets = {
     "m_pw": st.secrets["m_pw"]
     }
 
+## Functions for streamlit 
 @st.cache(allow_output_mutation=True)
 def get_data(what="raw"):
     
@@ -27,10 +31,12 @@ def get_data(what="raw"):
     
     #return df_list[0]
     return generate_record_raw(df_list[key])   
-#
+
+## Loading data 
 df = get_data()
 today = dt.date.today()
 
+## Main dashboard 
 def main(): 
     st.sidebar.subheader('Welcome mel!')
     st.sidebar.write(f'Stats of {today}')
@@ -83,6 +89,7 @@ def main():
 
     container = st.container()
     container.plotly_chart(gen_chart(df2, period_by=period_by_2[period_by], group_by=group_by_df), use_container_width=True) 
-#    
+
+## Process credentials
 if check_password(secrets):
     main()
