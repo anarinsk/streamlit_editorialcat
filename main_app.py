@@ -75,7 +75,7 @@ def main():
         }
     
     #st.write(df2.style.format(style))
-    st.dataframe(df2.style.format(style), width=1800, height=600)
+    st.dataframe(df2.style.format(style), width=1800)
 
     st.markdown("--------")
     
