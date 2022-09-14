@@ -182,7 +182,7 @@ def extract_metrics(df):
     
     return total_earning, diff_year_amt, diff_year_pct, latest_month_amt, month_before_amt, diff_month_pct, best_month, best_month_amt
 
-def format_all_yaxis(fig, font_size, tick_font_size=12.5): 
+def format_all_yaxis(fig, font_size, tick_font_size=12): 
     return fig.update_layout(font=dict(size=font_size), yaxis=dict(showticklabels=True, title_text='', tickangle=20, tickfont_size=tick_font_size, ticksuffix=' ', categoryorder='total ascending')) 
 
 def gen_chart(df, period_by, group_by):
