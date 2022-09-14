@@ -4,7 +4,7 @@ import numpy as np
 from functions_instruments import *
 import datetime as dt
 
-secrets = dict{
+secrets = {
     "project_id": st.secrets["project_id"],
     "private_key_id": st.secrets["private_key_id"],
     "private_key": st.secrets["private_key"],
