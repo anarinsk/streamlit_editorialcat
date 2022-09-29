@@ -34,6 +34,8 @@ def get_data(what="raw"):
 
 ## Loading data 
 df = get_data()
+## Cut date by 대금 수령일 
+date_max_by_paying = df.query("`수령액`>0")['대금 수령일'].max(); df = df.query("`대금 수령일`<=@date_max_by_paying")
 today = dt.date.today()
 
 ## Main dashboard 
