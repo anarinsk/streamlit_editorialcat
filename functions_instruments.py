@@ -79,8 +79,14 @@ def get_data_google_sheets(tab_index, secrets):
     df_list = [gss_to_df(gc, k) for k in tab_index]
         
     return df_list
-# 
-def turn_str_num(col: str) -> float: 
+#
+def turn_str_num(col: str) -> Decimal: 
+    "turn a str column with comma numeric to float"
+    col_dec = col.apply(lambda x: Decimal(sub(r'[^\d.]', '', x)))
+    #
+    return col_dec 
+#
+def turn_str_num_(col: str) -> float: 
     "turn a str column with comma numeric to float"
     col = col.str.replace("₩", '')
     col = col.str.replace(',', '')
