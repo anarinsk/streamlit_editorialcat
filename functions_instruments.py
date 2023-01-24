@@ -5,6 +5,9 @@ import gspread
 from google.oauth2.service_account import Credentials
 import plotly.graph_objects as go
 import plotly.express as px
+#
+from re import sub
+from decimal import Decimal
 
 # Password without SSO 
 def check_password(secrets):
@@ -80,11 +83,12 @@ def get_data_google_sheets(tab_index, secrets):
         
     return df_list
 #
-def turn_str_num(col: str) -> Decimal: 
+def turn_str_num(col: str) -> float: 
     "turn a str column with comma numeric to float"
-    col_dec = col.apply(lambda x: Decimal(sub(r'[^\d.]', '', x)))
+    col_num = col.apply(lambda x: sub(r'[^\d.]', '', x))
     #
-    return col_dec 
+    #return col
+    return pd.to_numeric(col_num)
 #
 def turn_str_num_(col: str) -> float: 
     "turn a str column with comma numeric to float"
