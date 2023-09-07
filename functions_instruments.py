@@ -110,7 +110,7 @@ def generate_record_raw(df):
     tdf = df.copy()
     tdf = tdf.drop(columns=cols_remove)
     tdf[cols_numeric] = tdf[cols_numeric].apply(turn_str_num, axis=1)
-    tdf[cols_date] = tdf[cols_date].apply(pd.to_datetime, axis=1)
+    tdf[cols_date] = tdf[cols_date].apply(pd.to_datetime, format="mixed", axis=1)
     tdf = tdf.assign(
         new_unit_price = np.where(tdf['단가']!=tdf['단가'], tdf['환율']*(tdf['RTM'] + np.nan_to_num(tdf['CPE']*tdf['CPER'])/tdf['RT']), tdf['단가'])
         )
