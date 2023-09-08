@@ -101,9 +101,9 @@ def turn_str_num_(col: str) -> float:
 #
 def generate_record_raw(df):
     cols_remove = []
-    cols_numeric = ['단가', '번역료', '수령액', 'RT', 'RTM', 'CPE', 'CPER', '환율']
+    cols_numeric = ['단가', '번역료', '수령액', 'RT', 'RTM', 'CPE', 'CPER', '환율', '보정환율']
     cols_date = ['마감일', '대금 수령일']
-    cols_use = ['발주처', '방영 채널', '작품명 / 시즌', 'Ep', 'RT', 'RTM', 'CPE', 'CPER', '환율', 
+    cols_use = ['발주처', '방영 채널', '작품명 / 시즌', 'Ep', 'RT', 'RTM', 'CPE', 'CPER', '보정환율', 
                 '영상 종류', '작업 종류', '마감일',
                 '대금 수령일', '단가', '번역료', '수령액', '비고', 'new_unit_price']
     # Cols to be handled 
@@ -112,7 +112,7 @@ def generate_record_raw(df):
     tdf[cols_numeric] = tdf[cols_numeric].apply(turn_str_num, axis=1)
     tdf[cols_date] = tdf[cols_date].apply(pd.to_datetime, format="mixed", axis=1)
     tdf = tdf.assign(
-        new_unit_price = np.where(tdf['단가']!=tdf['단가'], tdf['환율']*(tdf['RTM'] + np.nan_to_num(tdf['CPE']*tdf['CPER'])/tdf['RT']), tdf['단가'])
+        new_unit_price = np.where(tdf['단가']!=tdf['단가'], tdf['보정환율']*(tdf['RTM'] + np.nan_to_num(tdf['CPE']*tdf['CPER'])/tdf['RT']), tdf['단가'])
         )
     #
     return tdf[cols_use]
